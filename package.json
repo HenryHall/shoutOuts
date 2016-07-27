@@ -4,12 +4,23 @@
   "description": "Good Morning",
   "main": "Node server/app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "Node server/app.js"
   },
   "repository": {
     "type": "git",
     "url": "git remote add origin https://github.com/HenryHall/shoutOuts.git"
   },
   "author": "Henry",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^0.8.7",
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "express-session": "^1.14.0",
+    "express-sessions": "^1.0.5",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
+    "pg": "^6.0.3"
+  }
 }
