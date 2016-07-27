@@ -1,0 +1,124 @@
+{
+  "students": [
+    {
+      "first_name": "adam",
+      "last_name": "gothmann",
+      "city": "n/a",
+      "shoutout": "nothing yet"
+    },
+    {
+      "first_name": "anna",
+      "last_name": "baker",
+      "city": "n/a",
+      "shoutout": "nothing yet"
+    },
+    {
+      "first_name": "craig",
+      "last_name": "waldron",
+      "city": "n/a",
+      "shoutout": "nothing yet"
+    },
+    {
+      "first_name": "gini",
+      "last_name": "tyson",
+      "city": "n/a",
+      "shoutout": "nothing yet"
+    },
+    {
+      "first_name": "lanny",
+      "last_name": "maetzold",
+      "city": "n/a",
+      "shoutout": "nothing yet"
+    },
+    {
+      "first_name": "meg",
+      "last_name": "culotta",
+      "city": "n/a",
+      "shoutout": "nothing yet"
+    },
+    {
+      "first_name": "matthew",
+      "last_name": "crawford",
+      "city": "n/a",
+      "shoutout": "nothing yet"
+    },
+    {
+      "first_name": "nick",
+      "last_name": "gorbunov",
+      "city": "n/a",
+      "shoutout": "nothing yet"
+    },
+    {
+      "first_name": "pat",
+      "last_name": "may",
+      "city": "n/a",
+      "shoutout": "nothing yet"
+    },
+    {
+      "first_name": "susan",
+      "last_name": "rehl",
+      "city": "n/a",
+      "shoutout": "nothing yet"
+    },
+    {
+      "first_name": "ted",
+      "last_name": "karanikolas",
+      "city": "n/a",
+      "shoutout": "nothing yet"
+    },
+    {
+      "first_name": "tracey",
+      "last_name": "zavadil",
+      "city": "n/a",
+      "shoutout": "nothing yet"
+    },
+    {
+      "first_name": "bethany",
+      "last_name": "johnson",
+      "city": "n/a",
+      "shoutout": "nothing yet"
+    },
+    {
+      "first_name": "eric",
+      "last_name": "anderson",
+      "city": "n/a",
+      "shoutout": "nothing yet"
+    },
+    {
+      "first_name": "henry",
+      "last_name": "hall",
+      "city": "n/a",
+      "shoutout": "What's good?"
+    },
+    {
+      "first_name": "lukas",
+      "last_name": "udstuen",
+      "city": "n/a",
+      "shoutout": "nothing yet"
+    },
+    {
+      "first_name": "mai",
+      "last_name": "lee",
+      "city": "n/a",
+      "shoutout": "nothing yet"
+    },
+    {
+      "first_name": "nick",
+      "last_name": "okey",
+      "city": "n/a",
+      "shoutout": "nothing yet"
+    },
+    {
+      "first_name": "oliver",
+      "last_name": "langmo",
+      "city": "n/a",
+      "shoutout": "nothing yet"
+    },
+    {
+      "first_name": "sophia",
+      "last_name": "benson",
+      "city": "n/a",
+      "shoutout": "nothing yet"
+    }
+  ]
+}

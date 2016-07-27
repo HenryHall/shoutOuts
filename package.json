@@ -1,0 +1,15 @@
+{
+  "name": "shoutouts",
+  "version": "1.0.0",
+  "description": "Good Morning",
+  "main": "Node server/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git remote add origin https://github.com/HenryHall/shoutOuts.git"
+  },
+  "author": "Henry",
+  "license": "ISC"
+}
