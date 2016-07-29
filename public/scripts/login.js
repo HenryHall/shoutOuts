@@ -30,6 +30,10 @@ myApp.controller('loginController', ['$scope', '$http', '$window', function( $sc
   }).error(function(err){
       console.log(err);
         $window.location.href = 'views/failure.html';
+    })
+    .then(function(data){
+      console.log("In then with data", data);
+      $window.location.href = './views/submit.html';
     });
   };
 

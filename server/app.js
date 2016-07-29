@@ -3,6 +3,8 @@ var app=express();
 var path=require('path');
 var bodyParser=require('body-parser');
 var urlencodedParser=bodyParser.urlencoded( { extended: false } );
+app.use( bodyParser.json() );
+
 
 
 var passport = require('../server/strategies/userStrategy.js');
@@ -35,7 +37,12 @@ app.get( '/', function( req, res ){
 
 
 var loginRoute = require('../server/routes/loginRoute');
+var submit = require('../server/routes/submitRoute');
+var peerAssign = require('../server/routes/peerAssign');
+
 
 
 //Routes
 app.use('/loginRoute', loginRoute);
+app.use('/submit', submit);
+app.use('/getData', peerAssign);

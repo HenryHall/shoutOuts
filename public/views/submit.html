@@ -4,13 +4,16 @@
     <meta charset="utf-8">
     <title>Shout Out</title>
   </head>
-  <body>
-    <h1>Shout Out</h1>
+  <body ng-app="myApp">
 
-    <p>You have been assigned {{student}}.  Give {{student}} a shout out.</p>
-    <div class="alert alert-warning" role="alert">You only get to do this once!</div>
-    <textarea name="name" rows="8" cols="40"></textarea>
+    <div ng-controller="submitController">
+
+      <ng-include src="activeTab.url"></ng-include>
+
+    </div>
 
 
+    <script src="../vendors/angular.js" charset="utf-8"></script>
+    <script src="../scripts/submit.js" charset="utf-8"></script>
   </body>
 </html>

@@ -40,32 +40,36 @@ passport.deserializeUser(function(id, passDone) {
 passport.use('local', new localStrategy({
     passReqToCallback: true,
     usernameField: 'username'
-    }, function(req, username, password, done){
-      console.log("In Strat");
+  }, function(req, username, password, done){
 	    pg.connect(connection, function (err, client) {
 	    	console.log('called local - pg');
-	    	var user = {};
+	    	var user = [];
         var query = client.query("SELECT * FROM users WHERE username = $1", [username]);
 
         query.on('row', function (row) {
         	console.log('User obj', row);
-        	user = row;
+        	user.push(row);
+
 
           // Hash and compare
-          if(encryptLib.comparePassword(password, user.password)) {
-            // all good!
-            console.log('pass matched');
-            done(null, user);
-          } else {
-            console.log('pass dont match');
-            done(null, false, {message: 'Incorrect credentials.'});
-          }
+
 
         });
 
         // After all data is returned, close connection and return results
         query.on('end', function () {
-            client.end();
+          for(var i =0; i<user.length; i++){
+
+            if(encryptLib.comparePassword(password, user[i].password)) {
+              // all good!
+              console.log('pass matched');
+              done(null, user[i]);
+            } else {
+            console.log("no user found");
+            done(null, false, {message: 'Incorrect username or password'});
+          }
+        }
+          client.end();
         });
 
         // Handle Errors
