@@ -12,8 +12,8 @@ router.post('/', function(req, res, next) {
       if (err) { return next(err); }
       console.log('success');
       // res.redirect('/submit');
-      // res.sendFile( path.resolve( 'public/views/submit.html' ) );
-      res.send(req.user)
+      res.sendFile( path.resolve( 'public/views/submit.html' ) );
+      // res.send(req.user)
     });
   })(req, res, next);
 });
