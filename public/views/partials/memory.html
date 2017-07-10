@@ -1,0 +1,15 @@
+<div ng-controller="memoryController">
+
+  <h3>Thanks for playing!</h3>
+  <p>Your final score was <strong>{{score}} / {{results.length}}</strong></p>
+  <p>Please let me know if you believe that any of these answers were incorrect, or if you would like to add trivia about a classmate!</p>
+
+  <h3>Share a fond memory you have of PRIME!</h3>
+  <textarea ng-model="memoryIn"></textarea>
+  <button ng-click="submitMemory()">{{memoryStatus()}}</button>
+
+    <!-- <h3>Share a piece of trivia about another classmate to use on this quiz!</h3>
+    <textarea ng-model="triviaIn"></textarea>
+    <button ng-click="submitTrivia()">Submit</button> -->
+
+</div>
