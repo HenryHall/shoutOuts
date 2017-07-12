@@ -8,6 +8,19 @@ myApp.config([function(){
 
 myApp.controller('mainController', ['$scope', '$http', function( $scope, $http){
 
+
+  //Calculate div width
+  var rightHeader = document.getElementById('rightHeader');
+  var leftHeader =  document.getElementById('leftHeader');
+  var widthPercent = leftHeader.getBoundingClientRect().width / window.innerWidth;
+  console.log(widthPercent);
+  rightHeader.style.width = (1 - widthPercent - 0.11) * 100 + '%';
+  console.log(1 - (parseFloat(rightHeader.style.width) / 100));
+
+  rightHeader.style.height = leftHeader.getBoundingClientRect().height + 'px';
+  leftHeader.style.width = (widthPercent + 0.1) * 100 + '%';
+  console.log(leftHeader.style.width);
+
   $scope.currentQuestionIndex = -1;
   $scope.score = 0;
 
@@ -20,11 +33,6 @@ myApp.controller('mainController', ['$scope', '$http', function( $scope, $http){
     console.log(data.data);
 
     $scope.user = data.data.user;
-
-    //Load memory.html
-    // $scope.completed = true;
-    // $scope.score = data.data.score;
-    // $scope.currentTemplate = '../views/partials/memory.html';
 
     $scope.currentTemplate = '../views/partials/landing.html'
 
@@ -40,7 +48,7 @@ myApp.controller('mainController', ['$scope', '$http', function( $scope, $http){
   //Display based on if $scope.username is defined, the laziest possible way I could have done this.  Display still shutters
   $scope.greeting = function(){
     if ($scope.username){
-      return "Welcome, " + $scope.username;
+      return $scope.username;
     } else {
       return "You need a token to access this content.  Contact Henry with any problems."
     }
@@ -51,8 +59,8 @@ myApp.controller('mainController', ['$scope', '$http', function( $scope, $http){
 
     $scope.currentQuestionIndex += 1;
     console.log("Going to question,", $scope.currentQuestionIndex + 1);
-    if ($scope.currentQuestionIndex == $scope.questions.length){
-    // if ($scope.currentQuestionIndex == 2){
+    // if ($scope.currentQuestionIndex == $scope.questions.length){
+    if ($scope.currentQuestionIndex == 2){
       //Update completed status
       $http({
         method: 'PUT',
@@ -134,3 +142,32 @@ myApp.controller('mainController', ['$scope', '$http', function( $scope, $http){
 
 
 }]);
+
+myApp.directive('myHeader', function(){
+  return {
+    restrict: 'E',
+    // templateURL: '../views/partials/myHeader.html',
+    replace: true,
+    template: '<div id="headerContainer"><span id="leftHeader"><img id="prime" src="../assets/images/prime.png" alt=""><h2 id="greeting">{{greeting()}}</h2></span><span id="rightHeader"><div id="headerRightTop"></div><div id="headerRightBottom"></div></span></div>',
+    link: function(scope, element, attr){
+
+      //Calculate div width
+      var rightHeader = document.getElementById('rightHeader');
+      var leftHeader =  document.getElementById('leftHeader');
+      angular.element(leftHeader).ready(function(){
+        var widthPercent = leftHeader.getBoundingClientRect().width / window.innerWidth;
+        console.log(widthPercent);
+        rightHeader.style.width = (1 - widthPercent - 0.05) * 100 + '%';
+        console.log(1 - (parseFloat(rightHeader.style.width) / 100));
+
+        rightHeader.style.height = leftHeader.getBoundingClientRect().height + 'px';
+        leftHeader.style.width = (widthPercent + 0.05) * 100 + '%';
+        console.log(leftHeader.style.width);
+      });
+
+
+
+
+    }
+  }
+})

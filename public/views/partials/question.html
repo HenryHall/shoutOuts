@@ -1,11 +1,12 @@
-<div ng-controller="questionController">
+<div ng-controller="questionController" class="questionPartial">
 
   <h3>#{{currentQuestionIndex + 1}}/{{questions.length}}</h3>
   <p>{{questions[currentQuestionIndex].question}}</p>
+
   <select ng-model="chosenAnswer">
     <option ng-repeat="classmate in classList">{{classmate.name}}</option>
   </select>
-  <button ng-click="submitAnswer()">Next</button>
+  <button ng-click="submitAnswer()" class="btn btn-default">Next</button>
 
   <h4>Score: ({{score}}/{{questions.length}})</h4>
 

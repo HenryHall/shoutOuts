@@ -1,0 +1,101 @@
+
+body {
+  background-color: black;
+}
+
+#mainContent {
+  position: relative;
+  width: 80%;
+  margin: auto;
+  margin-top: 10vh;
+  padding: 50px;
+  padding-top: 27px;
+  border: 2px solid white;
+
+  font-family: 'Oswald', sans-serif;
+  color: white;
+  font-size: 48px;
+}
+
+#mainContent h3 {
+  border-bottom: 2px solid white;
+  padding-bottom: 10px;
+}
+
+#mainContent p, #mainContent button {
+  font-size: 32px;
+}
+
+#mainContent select {
+  font-size: 24px;
+  color: black;
+}
+
+#headerContainer {
+  background-color: rgb(0, 0, 0);
+}
+
+#prime {
+  display: inline-block;
+  height: 75px;
+}
+
+#greeting {
+  display: inline-block;
+  color: white;
+}
+
+#leftHeader, #rightHeader {
+  display: inline-block;
+  height: 100%;
+}
+
+#leftHeader {
+  border-bottom: 2px solid white;
+}
+
+#leftHeader h2 {
+  vertical-align: bottom;
+}
+
+#rightHeader {
+  vertical-align: bottom;
+}
+
+#headerRightTop {
+  height: 60%;
+}
+
+#headerRightBottom {
+  display: inline-block;
+  margin-left: -5px;
+  height: 40%;
+  width: 100%;
+  border-left: 2px solid white;
+  border-top: 2px solid white;
+}
+
+.questionPartial {
+  position: relative;
+}
+
+#topLeftBorder, #bottomRightBorder {
+  width: 25px;
+  height: 25px;
+  position: absolute;
+  background-color: black;
+}
+
+#topLeftBorder {
+  border-right: 2px solid white;
+  border-bottom: 2px solid white;
+  top: -2px;
+  left: -2px;
+}
+
+#bottomRightBorder {
+  border-left: 2px solid white;
+  border-top: 2px solid white;
+  bottom: -2px;
+  right: -2px;
+}
