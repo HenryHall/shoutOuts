@@ -11,29 +11,26 @@ myApp.controller('mainController', ['$scope', '$http', function( $scope, $http){
   $scope.currentQuestionIndex = -1;
   $scope.score = 0;
 
-  //Parse url
-  $scope.token = getQueryString('token');
-  console.log("Your token:", $scope.token);
 
-  //Send token, get data
+  //Get game data
   $http({
-    method: 'POST',
-    url: '/getData',
-    data: {token: $scope.token}
+    method: 'GET',
+    url: '/getData'
   }).then(function(data){
-    console.log(data);
-    if (data.data.completed == true){
-      //Load memory.html
-      $scope.completed = true;
-      $scope.score = data.data.score;
-      $scope.currentTemplate = '../views/partials/memory.html';
-    } else {
-      $scope.currentTemplate = '../views/partials/landing.html'
-    }
+    console.log(data.data);
 
-    $scope.username = data.data.username;
+    $scope.user = data.data.user;
+
+    //Load memory.html
+    // $scope.completed = true;
+    // $scope.score = data.data.score;
+    // $scope.currentTemplate = '../views/partials/memory.html';
+
+    $scope.currentTemplate = '../views/partials/landing.html'
+
+    $scope.username = $scope.user.username;
     $scope.classList = data.data.classList;
-    $scope.results = data.data.results;
+    $scope.questions = data.data.questions;
 
   }, function(err){
     console.log(err);
@@ -54,17 +51,16 @@ myApp.controller('mainController', ['$scope', '$http', function( $scope, $http){
 
     $scope.currentQuestionIndex += 1;
     console.log("Going to question,", $scope.currentQuestionIndex + 1);
-    if ($scope.currentQuestionIndex == $scope.results.length){
+    if ($scope.currentQuestionIndex == $scope.questions.length){
     // if ($scope.currentQuestionIndex == 2){
       //Update completed status
       $http({
         method: 'PUT',
-        url: '/complete',
-        data: {token: $scope.token}
+        url: '/complete'
       });
       //Done with questions
       $scope.currentTemplate = '../views/partials/memory.html';
-    } else if ($scope.results[$scope.currentQuestionIndex].imglink == null || $scope.results[$scope.currentQuestionIndex].imglink == undefined){
+    } else if ($scope.questions[$scope.currentQuestionIndex].imglink == null || $scope.questions[$scope.currentQuestionIndex].imglink == undefined){
       $scope.currentTemplate = '../views/partials/question.html';
     } else {
       $scope.currentTemplate = '../views/partials/questionWithImg.html';
@@ -80,7 +76,7 @@ myApp.controller('mainController', ['$scope', '$http', function( $scope, $http){
     $http({
       method: 'PUT',
       url: '/submitAnswer',
-      data: {questionId: $scope.results[$scope.currentQuestionIndex].id, answer: $scope.chosenAnswer, token: $scope.token}
+      data: {questionId: $scope.questions[$scope.currentQuestionIndex].id, answer: $scope.chosenAnswer}
     }).then(function(data){
       if (data.data.outcome == true){
         $scope.score += 1;
@@ -101,9 +97,24 @@ myApp.controller('mainController', ['$scope', '$http', function( $scope, $http){
   $scope.submitMemory = function(){
 
     $http({
-      method: 'PUT',
-      url: '/submitMemory',
-      data: {token: $scope.token, memory: $scope.memoryIn}
+      method: 'POST',
+      url: '/submit/memory',
+      data: {memory: $scope.memoryIn}
+    }).then(function(data){
+      console.log(data.data);
+      $scope.completed = true;
+      $scope.memoryIn = '';
+    });
+
+  };
+
+
+  $scope.submitTrivia = function(){
+
+    $http({
+      method: 'POST',
+      url: '/submit/trivia',
+      data: {question: $scope.triviaIn, classmate: angular.fromJson($scope.triviaAnswer)}
     }).then(function(data){
       console.log(data.data);
       $scope.completed = true;
@@ -115,7 +126,7 @@ myApp.controller('mainController', ['$scope', '$http', function( $scope, $http){
 
   $scope.memoryStatus = function(){
     if ($scope.completed == true){
-      return 'Update';
+      return 'Add Another';
     } else {
       return 'Submit';
     }
@@ -123,11 +134,3 @@ myApp.controller('mainController', ['$scope', '$http', function( $scope, $http){
 
 
 }]);
-
-
-function getQueryString( field, url ) {
-  var href = url ? url : window.location.href;
-  var reg = new RegExp( '[?&]' + field + '=([^&#]*)', 'i' );
-  var string = reg.exec(href);
-  return string ? string[1] : null;
-};

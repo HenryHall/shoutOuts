@@ -9,18 +9,19 @@ router.put('/', function(req, res){
 
   var answer = req.body.answer;
   var questionId = req.body.questionId;
-  var token = req.body.token;
+
+  //Validate
+  var user = req.session.user;
+  // if (!user || user.completed == true){res.sendStatus(403);};
+  if (!user){res.sendStatus(403);};
 
   pg.connect(connection, function(err, client, done){
 
-    //Make sure the user hasn't already completed the questions
-    //I'll just leave this part blank for some fun :D
-
-    var query = client.query('SELECT name FROM users WHERE id = ($1)', [questionId]);
+    var query = client.query('SELECT id, answer FROM trivia WHERE id = ($1)', [questionId]);
 
     query.on('row', function(row){
-      if (row.name == answer){
-        client.query('UPDATE users SET score = score + 1 WHERE token = ($1)', [token]);
+      if (row.answer == answer){
+        client.query('UPDATE users SET score = score + 1 WHERE token = ($1)', [user.token]);
         done();
         res.send({outcome: true});
       } else {

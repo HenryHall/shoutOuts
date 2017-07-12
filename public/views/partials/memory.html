@@ -8,8 +8,11 @@
   <textarea ng-model="memoryIn"></textarea>
   <button ng-click="submitMemory()">{{memoryStatus()}}</button>
 
-    <!-- <h3>Share a piece of trivia about another classmate to use on this quiz!</h3>
+    <h3>Share a piece of trivia about another classmate to use on this quiz!</h3>
     <textarea ng-model="triviaIn"></textarea>
-    <button ng-click="submitTrivia()">Submit</button> -->
+    <select ng-model="triviaAnswer">
+      <option ng-repeat="classmate in classList" value="{{classmate}}">{{classmate.name}}</option>
+    </select>
+    <button ng-click="submitTrivia()">Submit</button>
 
 </div>
