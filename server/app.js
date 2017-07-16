@@ -25,12 +25,7 @@ app.get( '/', function( req, res ){
     req.session.user = newUser;
 
     if (req.session.user){
-      // if (req.session.user.completed){
-      // Completed user, send them to memory and trivia submission
-        // res.sendFile( path.resolve( '' ))
-      // } else {
-        res.sendFile( path.resolve( 'public/views/login.html' ) );
-      // }
+      res.sendFile( path.resolve( 'public/views/login.html' ) );
     } else {
       res.sendStatus(403);
     }
@@ -45,6 +40,7 @@ var peerAssign = require('../server/routes/peerAssign');
 var submitAnswer = require('../server/routes/submitAnswer');
 var complete = require('../server/routes/complete');
 var submit = require('../server/routes/submit');
+var getMemories = require('../server/routes/getMemories.js');
 
 
 //Routes
@@ -52,3 +48,4 @@ app.use('/getData', peerAssign);
 app.use('/submitAnswer', submitAnswer);
 app.use('/complete', complete);
 app.use('/submit', submit);
+app.use('/getMemories', getMemories)

@@ -38,7 +38,7 @@ router.post('/trivia', function(req, res){
 
   pg.connect(connection, function(err, client, done){
 
-    client.query('INSERT INTO trivia(id, question, answer, submittedBy) VALUES ($1, $2, $3, $4)', [req.body.classmate.id, req.body.question, req.body.classmate.name, user.id])
+    client.query('INSERT INTO trivia(id, question, answer, submittedby) VALUES ($1, $2, $3, $4)', [req.body.classmate.id, req.body.question, req.body.classmate.name, user.id])
     .then(function(){
       res.sendStatus(200);
     }, function(err){

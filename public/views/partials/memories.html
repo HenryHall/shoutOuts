@@ -1,0 +1,16 @@
+<div id="classMemories" ng-controller="memoryController">
+
+  <div id="polaroid">
+    <!-- <div id="studentImg" ng-style="{'background-image': 'url(' + currentStudent.imglink + ')'}"></div> -->
+    <div id="studentImg"></div>
+    <h3 id="polaroidCursive">{{currentStudent.name}}</h3>
+  </div>
+
+  <div id="memoryControls" ng-include="memoryPartial"></div>
+
+  <div id="viewControls">
+    <button ng-click="prevClassmate()" class="btn btn-default">Previous</button>
+    <button ng-click="nextClassmate()" class="btn btn-default">Next</button>
+  </div>
+
+</div>

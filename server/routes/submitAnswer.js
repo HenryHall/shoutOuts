@@ -12,24 +12,24 @@ router.put('/', function(req, res){
 
   //Validate
   var user = req.session.user;
+  //I'll just leave this out for people to have fun with
   // if (!user || user.completed == true){res.sendStatus(403);};
   if (!user){res.sendStatus(403);};
 
   pg.connect(connection, function(err, client, done){
 
-    var query = client.query('SELECT id, answer FROM trivia WHERE id = ($1)', [questionId]);
+    var query = client.query('SELECT answer FROM trivia WHERE triviaid = ($1)', [questionId]);
 
     query.on('row', function(row){
       if (row.answer == answer){
         client.query('UPDATE users SET score = score + 1 WHERE token = ($1)', [user.token]);
-        done();
         res.send({outcome: true});
       } else {
-        done();
         res.send({outcome: false});
       }
     });
 
+    done();
 
   });
 

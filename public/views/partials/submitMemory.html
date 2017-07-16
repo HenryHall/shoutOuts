@@ -1,0 +1,9 @@
+<div ng-controller="submitMemoryController">
+  <h3>Share a fond memory you have of PRIME!</h3>
+  <div class="form-group">
+    <label>Memory:</label>
+    <textarea ng-model="memoryIn" class="form-control"></textarea>
+    <button ng-click="submitMemory()" class="btn btn-default">Submit</button>
+    <button ng-click="cancel()" class="btn btn-danger">Cancel</button>
+  </div>
+</div>

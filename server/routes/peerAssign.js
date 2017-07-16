@@ -15,7 +15,7 @@ router.get('/', function(req,res){
     var classList = [];
     var questions = [];
 
-    var query = client.query('SELECT id, name FROM users WHERE token != ($1)', [user.token]);
+    var query = client.query('SELECT id, name FROM users');
 
     query.on('row', function(row){
       classList.push(row);
@@ -23,7 +23,7 @@ router.get('/', function(req,res){
 
     query.on('end', function(){
 
-      var questionQuery = client.query('SELECT id, question FROM trivia WHERE id != ($1)', [user.id]);
+      var questionQuery = client.query('SELECT triviaid, question FROM trivia WHERE id != ($1)', [user.id]);
 
       questionQuery.on('row', function(row){
         questions.push(row);
@@ -46,6 +46,7 @@ router.get('/', function(req,res){
           questions[randomIndex] = temporaryValue;
         }
 
+        done();
         res.send({user: user, classList: classList, questions: questions});
 
       });

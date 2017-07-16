@@ -9,18 +9,6 @@ myApp.config([function(){
 myApp.controller('mainController', ['$scope', '$http', function( $scope, $http){
 
 
-  //Calculate div width
-  var rightHeader = document.getElementById('rightHeader');
-  var leftHeader =  document.getElementById('leftHeader');
-  var widthPercent = leftHeader.getBoundingClientRect().width / window.innerWidth;
-  console.log(widthPercent);
-  rightHeader.style.width = (1 - widthPercent - 0.11) * 100 + '%';
-  console.log(1 - (parseFloat(rightHeader.style.width) / 100));
-
-  rightHeader.style.height = leftHeader.getBoundingClientRect().height + 'px';
-  leftHeader.style.width = (widthPercent + 0.1) * 100 + '%';
-  console.log(leftHeader.style.width);
-
   $scope.currentQuestionIndex = -1;
   $scope.score = 0;
 
@@ -30,22 +18,42 @@ myApp.controller('mainController', ['$scope', '$http', function( $scope, $http){
     method: 'GET',
     url: '/getData'
   }).then(function(data){
-    console.log(data.data);
-
     $scope.user = data.data.user;
 
-    $scope.currentTemplate = '../views/partials/landing.html'
+    if ($scope.user.completed == true){
+      $scope.currentTemplate = '../views/partials/complete.html';
+    } else {
+      $scope.currentTemplate = '../views/partials/landing.html'
+    }
 
     $scope.username = $scope.user.username;
     $scope.classList = data.data.classList;
     $scope.questions = data.data.questions;
+    $scope.score = $scope.user.score;
+
+    //Resize header
+    var rightHeader = document.getElementById('rightHeader');
+    var leftHeader =  document.getElementById('leftHeader');
+
+    angular.element(leftHeader).ready(function(){
+      var widthPercent = (leftHeader.getBoundingClientRect().width + 15) / window.innerWidth;
+      rightHeader.style.width = (1 - widthPercent - .01) * 100 + '%';
+
+      rightHeader.style.height = leftHeader.getBoundingClientRect().height + 'px';
+      leftHeader.style.width = (widthPercent) * 100 + '%';
+    });
+
 
   }, function(err){
     console.log(err);
   });
 
+  $scope.incrementScore = function(){
+    $scope.score++;
+  }
 
-  //Display based on if $scope.username is defined, the laziest possible way I could have done this.  Display still shutters
+
+  //Display based on if $scope.username is defined, the laziest possible way I could have done this.  Display still stutters
   $scope.greeting = function(){
     if ($scope.username){
       return $scope.username;
@@ -58,22 +66,24 @@ myApp.controller('mainController', ['$scope', '$http', function( $scope, $http){
   $scope.next = function(){
 
     $scope.currentQuestionIndex += 1;
-    console.log("Going to question,", $scope.currentQuestionIndex + 1);
-    // if ($scope.currentQuestionIndex == $scope.questions.length){
     if ($scope.currentQuestionIndex == 2){
       //Update completed status
       $http({
         method: 'PUT',
-        url: '/complete'
+        url: '/complete/finished'
       });
       //Done with questions
-      $scope.currentTemplate = '../views/partials/memory.html';
-    } else if ($scope.questions[$scope.currentQuestionIndex].imglink == null || $scope.questions[$scope.currentQuestionIndex].imglink == undefined){
-      $scope.currentTemplate = '../views/partials/question.html';
+      $scope.currentTemplate = '../views/partials/complete.html';
     } else {
-      $scope.currentTemplate = '../views/partials/questionWithImg.html';
+      $scope.currentTemplate = '../views/partials/question.html';
     }
   };
+
+
+  $scope.goToMemories = function(){
+    $scope.currentTemplate = '../views/partials/memories.html';
+  };
+
 
 }])
 
@@ -84,10 +94,10 @@ myApp.controller('mainController', ['$scope', '$http', function( $scope, $http){
     $http({
       method: 'PUT',
       url: '/submitAnswer',
-      data: {questionId: $scope.questions[$scope.currentQuestionIndex].id, answer: $scope.chosenAnswer}
+      data: {questionId: $scope.questions[$scope.currentQuestionIndex].triviaid, answer: $scope.chosenAnswer}
     }).then(function(data){
       if (data.data.outcome == true){
-        $scope.score += 1;
+        $scope.incrementScore();
       }
       console.log(data.data.outcome);
     });
@@ -100,48 +110,152 @@ myApp.controller('mainController', ['$scope', '$http', function( $scope, $http){
 
 }])
 
+.controller('completeController', ['$scope', '$http', function($scope, $http){
+
+  $scope.playAgain = function(){
+    $http({
+      method: 'PUT',
+      url: '/complete/playAgain'
+    })
+    .then(function(data){
+      console.log("Going home!");
+      location.reload();
+    });
+  };
+
+}])
+
+
 .controller('memoryController', ['$scope', '$http', function($scope, $http){
+  $scope.classListIndex;
+  $scope.memoryPartial = "../views/partials/memoryControl.html";
+
+  //Grab all memories
+  $http({
+    method: 'GET',
+    url: '/getMemories'
+  }).then(function(data){
+    var memories = data.data;
+    $scope.classList.forEach(function(student){
+      student.memories = [];
+      memories.forEach(function(memory){
+        if(student.id == memory.id){
+          student.memories.push(memory.memory);
+        }
+      });
+      //Set the imglink
+      student.imglink = '../assets/images/Nu/' + student.name.replace(' ', '').toLowerCase() + '.jpg';
+    });
+    //Pick a random starting student
+    $scope.classListIndex = Math.floor(Math.random() * ($scope.classList.length - 1));
+    $scope.currentStudent = $scope.classList[$scope.classListIndex];
+    //The url needs to be set this way to avoid conflict with server auth
+    angular.element(document.getElementById('studentImg')).ready(function(){
+      document.getElementById('studentImg').style['background-image'] = 'url(' + $scope.currentStudent.imglink + ')'
+    });
+  });
+
+
+  $scope.prevClassmate = function(){
+    $scope.setMemoryPartial("../views/partials/memoryControl.html");
+    if ($scope.classListIndex - 1 < 0){
+      $scope.classListIndex = $scope.classList.length - 1;
+    } else {
+      $scope.classListIndex--;
+    }
+    $scope.currentStudent = $scope.classList[$scope.classListIndex];
+    //The url needs to be set this way to avoid conflict with server auth
+    angular.element(document.getElementById('studentImg')).ready(function(){
+      document.getElementById('studentImg').style['background-image'] = 'url(' + $scope.currentStudent.imglink + ')'
+    });
+
+  };
+
+
+  $scope.nextClassmate = function(){
+    // $scope.memoryPartial = "../views/partials/memoryControl.html";
+    $scope.setMemoryPartial("../views/partials/memoryControl.html");
+    if ($scope.classListIndex + 1 >= $scope.classList.length){
+      $scope.classListIndex = 0;
+    } else {
+      $scope.classListIndex++;
+    }
+    $scope.currentStudent = $scope.classList[$scope.classListIndex];
+    //The url needs to be set this way to avoid conflict with server auth
+    angular.element(document.getElementById('studentImg')).ready(function(){
+      document.getElementById('studentImg').style['background-image'] = 'url(' + $scope.currentStudent.imglink + ')'
+    });
+  };
+
+
+  $scope.showSubmitPartial = function(){
+    if ($scope.currentStudent.id == $scope.user.id){
+      $scope.setMemoryPartial("../views/partials/submitMemory.html");
+    } else {
+      $scope.setMemoryPartial("../views/partials/submitTrivia.html");
+    }
+  };
+
+
+  $scope.cancel = function(){
+    $scope.setMemoryPartial("../views/partials/memoryControl.html");
+  };
+
+  $scope.setMemoryPartial = function(url){
+    $scope.memoryPartial = url;
+  }
+
+}])
+
+
+.controller('submitTriviaController', ['$scope', '$http', '$timeout', function($scope, $http, $timeout){
+
+  $scope.submitTrivia = function(){
+    $http({
+      method: 'POST',
+      url: '/submit/trivia',
+      data: {question: $scope.triviaIn, classmate: $scope.currentStudent}
+    }).then(function(data){
+      console.log(data.data);
+      $scope.triviaIn = '';
+
+      $scope.setMemoryPartial("../views/partials/thanks.html");
+      $timeout(function(){$scope.setMemoryPartial("../views/partials/memoryControl.html");}, 3000);
+
+    });
+  };
+
+}])
+
+
+.controller('submitMemoryController', ['$scope', '$http', '$timeout', function($scope, $http, $timeout){
 
   $scope.submitMemory = function(){
-
     $http({
       method: 'POST',
       url: '/submit/memory',
       data: {memory: $scope.memoryIn}
     }).then(function(data){
       console.log(data.data);
-      $scope.completed = true;
+
+      //Add it to the classlist and update currentStudent
+      $scope.classList.forEach(function(student){
+        if (student.id == $scope.user.id){
+          student.memories.push($scope.memoryIn);
+        }
+      });
+      $scope.currentStudent = $scope.classList[$scope.classListIndex];
+
       $scope.memoryIn = '';
+
+      $scope.setMemoryPartial("../views/partials/thanks.html");
+      $timeout(function(){$scope.setMemoryPartial("../views/partials/memoryControl.html");}, 3000);
+
     });
-
   };
-
-
-  $scope.submitTrivia = function(){
-
-    $http({
-      method: 'POST',
-      url: '/submit/trivia',
-      data: {question: $scope.triviaIn, classmate: angular.fromJson($scope.triviaAnswer)}
-    }).then(function(data){
-      console.log(data.data);
-      $scope.completed = true;
-      $scope.memoryIn = '';
-    });
-
-  };
-
-
-  $scope.memoryStatus = function(){
-    if ($scope.completed == true){
-      return 'Add Another';
-    } else {
-      return 'Submit';
-    }
-  };
-
 
 }]);
+
 
 myApp.directive('myHeader', function(){
   return {
@@ -150,23 +264,6 @@ myApp.directive('myHeader', function(){
     replace: true,
     template: '<div id="headerContainer"><span id="leftHeader"><img id="prime" src="../assets/images/prime.png" alt=""><h2 id="greeting">{{greeting()}}</h2></span><span id="rightHeader"><div id="headerRightTop"></div><div id="headerRightBottom"></div></span></div>',
     link: function(scope, element, attr){
-
-      //Calculate div width
-      var rightHeader = document.getElementById('rightHeader');
-      var leftHeader =  document.getElementById('leftHeader');
-      angular.element(leftHeader).ready(function(){
-        var widthPercent = leftHeader.getBoundingClientRect().width / window.innerWidth;
-        console.log(widthPercent);
-        rightHeader.style.width = (1 - widthPercent - 0.05) * 100 + '%';
-        console.log(1 - (parseFloat(rightHeader.style.width) / 100));
-
-        rightHeader.style.height = leftHeader.getBoundingClientRect().height + 'px';
-        leftHeader.style.width = (widthPercent + 0.05) * 100 + '%';
-        console.log(leftHeader.style.width);
-      });
-
-
-
 
     }
   }

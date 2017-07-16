@@ -1,0 +1,13 @@
+<div>
+  <h3>Memories</h3>
+
+  <div id="memoryContainer">
+    <p ng-repeat="memory in currentStudent.memories">
+      - {{memory}}
+    </p>
+    <p ng-if="currentStudent.memories.length == 0">This user hasn't shared any memories yet!</p>
+  </div>
+
+  <button ng-click="showSubmitPartial()" ng-if="currentStudent.id != user.id" class="btn btn-default">Submit Trivia</button>
+  <button ng-click="showSubmitPartial()" ng-if="currentStudent.id == user.id" class="btn btn-default">Submit A Memory</button>
+</div>

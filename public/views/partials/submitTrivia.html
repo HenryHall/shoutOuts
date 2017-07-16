@@ -1,0 +1,8 @@
+<div ng-controller="submitTriviaController">
+  <h3>Submit trivia for {{currentStudent.name}}!</h3>
+  <div class="form-group">
+    <textarea ng-model="triviaIn" class="form-control"></textarea>
+    <button ng-click="submitTrivia()" class="btn btn-default">Submit</button>
+    <button ng-click="cancel()" class="btn btn-danger">Cancel</button>
+  </div>
+</div>

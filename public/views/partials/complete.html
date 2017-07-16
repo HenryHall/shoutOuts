@@ -1,0 +1,11 @@
+<div ng-controller="completeController">
+
+  <h3>Thanks for playing!</h3>
+  <p>Final score: <strong>{{score}} / {{questions.length}}</strong></p>
+  <p>Check out what your classmates have shared about their time at PRIME and submit trivia about them.</p>
+  <p>Or, try playing again, more trivia may have been submitted since the last time you played.</p>
+
+  <button ng-click="goToMemories()" class="btn btn-default">Class Memories</button>
+  <button ng-click="playAgain()" class="btn btn-default">Play Again</button>
+
+</div>
