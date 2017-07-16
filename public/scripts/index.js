@@ -66,7 +66,7 @@ myApp.controller('mainController', ['$scope', '$http', function( $scope, $http){
   $scope.next = function(){
 
     $scope.currentQuestionIndex += 1;
-    if ($scope.currentQuestionIndex == 2){
+    if ($scope.currentQuestionIndex == $scope.questions.length - 1){
       //Update completed status
       $http({
         method: 'PUT',
