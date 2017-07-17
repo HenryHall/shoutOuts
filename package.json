@@ -5,7 +5,7 @@
   "main": "Node server/app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "Node server/app.js"
+    "start": "nodemon server/app.js"
   },
   "repository": {
     "type": "git",
@@ -19,6 +19,7 @@
     "express": "^4.14.0",
     "express-session": "^1.14.0",
     "express-sessions": "^1.0.5",
+    "nodemon": "^1.11.0",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
     "pg": "^6.0.3"
